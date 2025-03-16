@@ -1,0 +1,367 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+:root {
+  --shadow: 0px 3px 10px #222222ab;
+  --accent: #263966;
+  --accentlight: #537998;
+  --highlightshadow: 0px 3px 10px var(--accentlight);
+  --accentbg: #f2f7fc;
+  --notwhite: #f5f5f5;
+  --fore: #363636;
+}
+
+body {
+  font-family: "Source Sans 3", system-ui, -apple-system, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--fore);
+}
+
+em {
+  color: var(--accent);
+}
+
+.intro,
+h1,
+h2 {
+  font-family: "Manrope", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+.intro {
+  --iconsz: 80px;
+  --venuesz: 1.17rem;
+  --authors-relative-shift: 0.5;
+  --nav-margin-right: 10%;
+  --nav-upshift-mult: 1;
+  --nav-flex-basis: auto;
+  --nav-special-flex-basis: auto;
+  margin: 0px auto;
+  padding-top: 2px;
+  /* box-shadow: var(--shadow); */
+
+  .logobox {
+    position: absolute;
+    width: var(--iconsz);
+    aspect-ratio: 1;
+    display: flex;
+    background-color: white;
+    box-shadow: var(--shadow);
+    border-radius: 15px;
+    transition: box-shadow 0.1s;
+
+    img {
+      width: 96%;
+      margin: auto auto;
+    }
+  }
+
+  .logobox:hover {
+    box-shadow: var(--highlightshadow);
+  }
+
+  .titlebox {
+    margin-left: calc(var(--iconsz) * 0.6);
+    margin-top: calc(var(--iconsz) * 0.5);
+    margin-right: calc(var(--iconsz) * 0.5);
+    background-color: var(--accentbg);
+    box-shadow: var(--shadow);
+    border-radius: 15px;
+    padding: 3px calc(var(--iconsz) / 2);
+    font-size: 1.75rem;
+    min-height: 3.75rem;
+
+    h1 {
+      margin-top: 0.57em;
+      margin-bottom: 0.67em;
+      /* this is default h1 bottom margin */
+    }
+  }
+
+  nav {
+    margin-top: calc(-1 * var(--nav-upshift-mult) * var(--venuesz));
+    margin-left: auto;
+    margin-right: var(--nav-margin-right);
+    display: flex;
+    width: fit-content;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 4px;
+  }
+
+  nav>* {
+    display: block;
+    flex: 0 1 var(--nav-flex-basis);
+    border-radius: 15px;
+    background-color: var(--accent);
+    box-shadow: var(--shadow);
+    color: rgb(242, 247, 252);
+    padding: 0px calc(var(--venuesz) * 1.12);
+    font-size: var(--venuesz);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-right: calc(0.5 * var(--venuesz));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  nav>.venue {
+    background: white;
+    color: var(--fore);
+    flex: 0 1 var(--nav-special-flex-basis);
+    text-align: center;
+    justify-content: center;
+  }
+
+  nav>a {
+    transition: background-color 0.11s;
+    text-decoration: none;
+    text-wrap: wrap auto;
+  }
+
+  nav .icon {
+    margin-right: 0.5rem;
+  }
+
+  nav>a:hover {
+    background-color: var(--accentlight);
+  }
+
+  .authors {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 80%;
+    flex-wrap: wrap;
+    font-size: 1.2rem;
+  }
+
+  .authors>* {
+    flex: auto;
+    text-align: center;
+    margin-left: 6px;
+    margin-right: 6px;
+  }
+
+  .authors a {
+    color: var(--accent);
+    text-decoration: none;
+    text-underline-offset: 3px;
+  }
+
+  .authors a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+
+  .affiliations {
+    text-align: center;
+    margin: 0px auto;
+  }
+}
+
+section {
+  margin: 4px auto;
+  border-radius: 4px;
+
+  .fullwidth {
+    display: block;
+    width: 100%
+  }
+
+  .mediumwidth {
+    display: block;
+    width: 85%;
+    margin: 0px auto;
+  }
+
+  p {
+    font-size: 1.2rem;
+  }
+}
+
+h2 {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 2.3rem;
+  padding: 4px 1.2rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  background-color: var(--notwhite);
+}
+
+@media (min-width: 200px) {
+  .intro {
+    --iconsz: 32px;
+    --venuesz: 0.75rem;
+    --authors-relative-shift: 0;
+    --nav-margin-right: auto;
+    --nav-upshift-mult: -0.5;
+    --nav-flex-basis: 25%;
+    --nav-special-flex-basis: 70%;
+
+    .authors {
+      font-size: 1rem;
+    }
+  }
+
+  section {
+    width: calc(94.5vw - 30px);
+    padding: 15px 15px;
+
+    .mediumwidth {
+      width: 100%;
+    }
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+}
+
+
+@media (min-width: 350px) {
+  .intro {
+    --iconsz: 48px;
+    --venuesz: 0.9rem;
+    --authors-relative-shift: 0.1;
+    --nav-margin-right: auto;
+    --nav-upshift-mult: -0.5;
+    --nav-flex-basis: 25%;
+    --nav-special-flex-basis: 70%;
+
+    .authors {
+      font-size: 1.1rem;
+    }
+  }
+
+  section {
+    width: calc(92.5vw - 30px);
+    padding: 20px 20px;
+  }
+
+  h1 {
+    font-size: 1.45rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (min-width: 430px) {
+  .intro {
+    --nav-flex-basis: auto;
+    --nav-special-flex-basis: auto;
+
+    nav {
+      flex-wrap: nowrap;
+    }
+  }
+
+}
+
+@media (min-width: 660px) {
+  .intro {
+    --iconsz: 68px;
+    --venuesz: 1.05rem;
+    --authors-relative-shift: 0.19;
+    --nav-margin-right: auto;
+    --nav-upshift-mult: -0.5;
+
+    .authors {
+      font-size: 1.2rem;
+    }
+  }
+
+  section {
+    width: calc(72vw + 80px - 30px);
+    padding: 25px 25px;
+
+    .mediumwidth {
+      width: 92.5%;
+    }
+  }
+
+  h1 {
+    font-size: 1.85rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .intro {
+    --iconsz: 80px;
+    --venuesz: 1.1rem;
+    --authors-relative-shift: 0.28;
+    --nav-margin-right: 10%;
+    --nav-upshift-mult: 1;
+
+    .authors {
+      font-size: 1.25rem;
+    }
+  }
+
+  section {
+    width: calc(60vw + 190px - 30px);
+    padding: 30px 30px;
+
+    .mediumwidth {
+      width: 90%;
+    }
+  }
+
+  h1 {
+    font-size: 2.375rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 1281px) {
+  .intro {
+    --iconsz: 80px;
+    --venuesz: 1.17rem;
+    --authors-relative-shift: 0.24;
+    --nav-margin-right: 10%;
+    --nav-upshift-mult: 1;
+
+    .authors {
+      font-size: 1.3rem;
+    }
+  }
+
+  section {
+    width: calc(50vw + 280px - 30px);
+    padding: 35px 35px;
+
+    .mediumwidth {
+      width: 85%;
+    }
+  }
+
+  h1 {
+    font-size: 2.65rem;
+  }
+
+  h2 {
+    font-size: 2.3rem;
+  }
+}
