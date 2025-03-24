@@ -9,7 +9,35 @@
   <title>Geometry in Style</title>
   <link href="style.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <style>
+    /* from https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css */
+    @font-face {
+      font-family: 'Academicons';
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+      src: url('https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/fonts/academicons.eot') format('embedded-opentype'),
+        url('https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/fonts/academicons.ttf') format('truetype'),
+        url('https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/fonts/academicons.woff') format('woff'),
+        url('https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/fonts/academicons.svg') format('svg');
+    }
+
+    .ai {
+      font-family: 'Academicons';
+      font-weight: 400;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      display: inline-block;
+      font-style: normal;
+      font-variant: normal;
+      text-rendering: auto;
+      line-height: 1;
+    }
+
+    .ai-arxiv:before {
+      content: "\e974";
+    }
+  </style>
 
   <meta name="description" content="Geometry in Style: 3D Stylization via Surface Normal Deformation">
   <meta name="keywords" content="geometry, graphics, processing, stylization, 3d, shape, generative">
@@ -28,12 +56,13 @@
       </div>
     </a>
     <div class="titlebox">
-      <h1>Geometry in&nbsp;Style:<wbr> 3D&nbsp;Stylization via Surface&nbsp;Normal Deformation</h1>
+      <h1>Geometry in<i class="med-nbsp"></i>Style:<wbr> 3D<i class="med-nbsp"></i>Stylization via Surface<i
+          class="wide-nbsp"></i>Normal<i class="wide-nbsp"></i>Deformation</h1>
     </div>
     <nav>
       <span class="venue"><i class="icon fas fa-map-marker-alt"></i>CVPR 2025</span>
       <a href="#"><i class="icon fas fa-file-pdf"></i>Paper</a>
-      <a href="#"><i class="icon ai ai-arxiv"></i>ArXiv</a>
+      <a href="#"><i class="icon ai ai-arxiv"></i>arXiv</a>
       <a href="https://github.com/threedle/geometry-in-style/"><i class="icon fab fa-github"></i>Code</a>
     </nav>
     <div class="authors">
@@ -45,23 +74,38 @@
     </div>
     <div class="affiliations"><sup>1</sup>University of Chicago, <sup>2</sup>University of Southern California</div>
   </section>
-  <section>
-    <img class="fullwidth" src="assets/teaser.png">
-    <p class="bigcaption">TODO</p>
+  <section class="teaser">
+    <div class="teaserbox">
+      <img class="halfwidthflex" src="assets/teaser2x2-A.png">
+      <img class="halfwidthflex" src="assets/teaser2x2-B.png">
+    </div>
+    <!-- <img class="fullwidth" src="assets/teaser.png"> -->
+    <p class="graybox">
+      Guided by a text prompt, Geometry in Style produces an <b>identity-preserving stylization</b>
+      of mesh geometry. The deformation is represented and optimized via <b>per-vertex normals</b>,
+      solved into vertex displacements in an inherently regularizing manner using <b>dARAP</b>,
+      a differentiable one-step adaptation of classical As-Rigid-As-Possible deformation.
+    </p>
   </section>
   <section>
     <h2>Optimization overview</h2>
     <img class="mediumwidth" src="assets/overview.png">
-    <p class="caption">Overview of our deformation optimization pipeline. TODO</p>
+    <p class="graybox">
+      <b>Overview of an optimization iteration.</b> Using the normals undergoing optimization as a target for our
+      differentiable As-Rigid-As-Possible method (dARAP), the
+      dARAP local step computes a rotation matrix per vertex; the dARAP global solve then finds the deformed surface
+      from these local rotations. We use a differentiable renderer and a diffusion model-based semantic loss to
+      guide the normals being optimized towards a deformation matching the desired style prompt.
+    </p>
   </section>
   <section>
     <h2>Gallery</h2>
     <img class="fullwidth" src="assets/gallery.png">
-    <p class="caption">
-      <b>Our method is capable of deforming various input meshes towards a variety of text-specified styles.</b>
-      The style can be manifested as fine geometric details, like in the <em>ornate art deco
-      column</em>, or as low-frequency deformations, such as the joints of the <em>cybernetic
-      glove</em>. Our method retains the structural features of the input shape, such as a flat
+    <p class="graybox">
+      <b>Various input meshes towards a variety of text-specified styles.</b>
+      The style can manifest as fine geometric details, like in the <em>ornate art deco
+        column</em>, or as low-frequency deformations, such as the joints of the <em>cybernetic
+        glove</em>. Our method retains the structural features of the input shape, such as a flat
       arm on the <em>antique sofa</em>. Moreover, the resultant stylizations are in accordance
       with prompt semantics and part-aware semantics: the folds in the tropical chair are on
       the seat and backrest as opposed to the legs, the head of the penguin becomes like the
@@ -69,7 +113,7 @@
     </p>
   </section>
   <section>
-    <h2>Normals and differentiable ARAP</h2>
+    <h2>Normals and differentiable&nbsp;ARAP</h2>
     <p>TODO</p>
   </section>
   <section>
