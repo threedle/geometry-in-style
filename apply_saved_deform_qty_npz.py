@@ -1,5 +1,5 @@
 # applies and visualizes the nrmls, jcbns, rot3x2 etc files from deform_with_csd_dARAP.py
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Sequence
 from dataclasses import dataclass
 import json
 import numpy as np
@@ -17,29 +17,30 @@ thlog.init_polyscope()
 
 @dataclass
 class ApplySavedDeformSettings(Thronfig):
-    fname: str
     solve_method: Optional[deformations_dARAP.DeformSolveMethodName] = None
     arap_energy_type: Optional[deformations_dARAP.ARAPEnergyTypeName] = None
     local_step_procrustes_lambda_and_normalize: Optional[Tuple[float, bool]] = None
     pin_first_vertex: bool = True
     save_fname: Optional[str] = None
-    load_cfg_from_npz: bool = True
-
-    def __post_typecheck__(self):
-        if not self.load_cfg_from_npz:
-            if self.solve_method is None:
-                raise InvalidConfigError(
-                    "if --load_cfg_from_npz false, must specify explicit --solve_method"
-                )
 
 
 def load_saved_deform_and_apply(
-    config: ApplySavedDeformSettings, device: torch.device
-) -> Tuple[np.ndarray, np.ndarray, deformations_dARAP.QuantityBeingOptimized, torch.Tensor]:
-    with np.load(config.fname) as npz:
+    fname: str,
+    remaining_cli_args: Sequence[str],
+    load_cfg_from_npz: bool,
+    base_config: ApplySavedDeformSettings,
+    device: torch.device,
+) -> Tuple[
+    ApplySavedDeformSettings,
+    np.ndarray,
+    np.ndarray,
+    deformations_dARAP.QuantityBeingOptimized,
+    torch.Tensor,
+]:
+    with np.load(fname) as npz:
         verts = npz["verts"]
         faces = npz["faces"]
-        if config.load_cfg_from_npz and "deform_by_csd_cfg" in npz:
+        if load_cfg_from_npz and "deform_by_csd_cfg" in npz:
             try:
                 loaded_deform_by_csd_cfg = json.loads(str(npz["deform_by_csd_cfg"]))
             except BaseException as e:
@@ -47,31 +48,32 @@ def load_saved_deform_and_apply(
                 loaded_deform_by_csd_cfg = None
         else:
             loaded_deform_by_csd_cfg = None
+        config = base_config
 
         if loaded_deform_by_csd_cfg:
-            thlog.info(
-                "replacing command line/configured values with values loaded from deform config file"
-            )
             if _v := loaded_deform_by_csd_cfg.get("arap_energy_type"):
-                thlog.info(f"replacing arap_energy_type with {_v}")
                 config.arap_energy_type = _v
             if _v := loaded_deform_by_csd_cfg.get("solve_method"):
-                thlog.info(f"replacing solve_method with {_v}")
                 config.solve_method = _v
             if _v := loaded_deform_by_csd_cfg.get("pin_first_vertex"):
-                thlog.info(f"replacing pin_first_vertex with {_v}")
                 config.pin_first_vertex = _v
             if _p := loaded_deform_by_csd_cfg.get("local_step_procrustes"):
                 if _p is not None:
-                    thlog.info(f"replacing local_step_procrustes {_p}")
                     config.local_step_procrustes_lambda_and_normalize = (
                         _p["lamb"],
                         _p["normalize_target_normals"],
                     )
         else:
-            thlog.err(
-                "unable to parse saved config string in npz file, still using command line/configured values"
-            )
+            if load_cfg_from_npz:
+                thlog.err(
+                    "unable to parse saved config string in npz file, still using command line/configured values"
+                )
+            else:
+                thlog.err(
+                    "not parsing saved config string in npz file, using only command line/configured values"
+                )
+        config.patch_from_command_line_args(remaining_cli_args)
+        config.typecheck_and_convert()
 
         verts = deformations_dARAP.normalize_to_side2_cube_inplace_np_singlemesh(verts)
         if (
@@ -156,7 +158,7 @@ def load_saved_deform_and_apply(
             )
         )
         deformed_verts = torch.cat(tuple(deformed_verts), dim=0)
-    return patient_v, patient_f, quantity_struct, deformed_verts
+    return config, patient_v, patient_f, quantity_struct, deformed_verts
 
 
 def main():
@@ -164,15 +166,21 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", type=str, help=".npz filename saved from optimization run")
-    config, _ = ApplySavedDeformSettings.parse_args(
-        "config",
-        map_namespace_fields_to_config_fields={"fname": "fname"},
-        extend_existing_parser=parser,
+    parser.add_argument(
+        "--load_cfg_from_npz", type=str, choices=["true", "false"], default="true"
     )
+    # ^ 'true' 'false' to be consistent with json lowercase bools which are what Thronfig parses
+    namespace, remaining_cli_args = parser.parse_known_args()
     device = torch.device("cuda")
-
-    patient_v, patient_f, quantity_struct, deformed_verts = load_saved_deform_and_apply(
-        config, device
+    print(namespace.load_cfg_from_npz)
+    config, patient_v, patient_f, quantity_struct, deformed_verts = (
+        load_saved_deform_and_apply(
+            namespace.fname,
+            remaining_cli_args,
+            (namespace.load_cfg_from_npz == "true"),
+            ApplySavedDeformSettings(),
+            device,
+        )
     )
 
     psmesh = thlog.psr.register_surface_mesh("orig", patient_v, patient_f)
