@@ -1,0 +1,59 @@
+{
+  "ps_recording_save_fname": "psrec-deform-DESCRIBE_YOUR_RUN_HERE.npz",
+  "dataset": {
+    "lists": {
+      "fnames": [
+        "YOUR_MESH_FOLDER_HERE/EXAMPLE/bigcat_MaleLion800.obj"
+      ],
+      "prompts": [
+        "a 3d render of a robot lion"
+      ],
+      "prompts_negative": [
+        null
+      ]
+    }
+  },
+  "deform_by_csd": {
+    "optimized_quantity_save_fname": "nrmls-deform-DESCRIBE_YOUR_RUN_HERE.npz",
+    "optimize_deform_via": "verts_normals",
+    "solve_method": "arap",
+    "arap_energy_type": "spokes_and_rims_mine",
+    "pin_first_vertex": true,
+    "local_step_procrustes": {
+      "lamb": 8.0,
+      "normalize_target_normals": true
+    },
+    "n_iters": 2500,
+    "lr": 0.0020,
+    "optimizer_type": "Adam",
+    "n_accum_iters": 2,
+    "step_after_every_backward": true,
+    "view_once_every": 100,
+    "save_at_epochs": [],
+    "mesh_batch_size": 1,
+    "view_batch_size": 8,
+    "adapt_dists": true,
+    "background_color": [1.0, 1.0, 1.0],
+    "resize_for_guidance": [224,224,"cubic"],
+    "stage_I_weight": 1.0,
+    "stage_II_weight_schedule": "0.0>0.2:1000; 0.2>0.3:750",
+    "visual_loss_weight_schedule": "100.0",
+    "jacobian_id_loss_weight_schedule": "0.0",
+    "guidance": {
+      "guidance_scale": 100.0
+    },
+    "cams_and_lights": {
+      "raster_res": 512,
+      "dist_minmax": [2.5,3.0],
+      "azim_minmax": [0.0,360.0],
+      "elev_minmax": [0.0,60.0],
+      "fov_minmax": [60.0, 60.0],
+      "//fov_minmax": [55.0, 80.0],
+      "light_power": 5.0,
+      "aug_loc": false,
+      "aug_light": true,
+      "look_at": [0,0,0],
+      "up": [0,-1,0]
+    }
+  }
+}

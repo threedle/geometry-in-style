@@ -1,0 +1,50 @@
+name: geomstyle
+channels:
+  - pytorch
+  - nvidia
+  - fvcore
+  - iopath
+  - pytorch3d
+  - conda-forge
+  - nodefaults
+
+# make sure in your .condarc the "channel_priority" field is NOT set to "strict"
+# if it is, comment out that line
+
+# also make sure that you are creating the conda env on a system/compute node with
+# CUDA available (i.e. can run $ nvidia-smi) so that the right pytorch build installs
+
+dependencies:
+  - python==3.10
+  - pytorch==2.1.0
+  - pytorch-cuda==12.1
+  - torchvision
+  - fvcore # runtime dep of pytorch3d
+  - iopath # runtime dep of pytorch3d
+  - pytorch3d::pytorch3d
+  - pip
+  - pip:
+    # - --find-links https://data.pyg.org/whl/torch-2.1.0+cu121.html # for torch-scatter, torch-sparse
+    - transformers[sentencepiece]
+    - diffusers[torch]
+    - polyscope
+    - scipy>=1.10
+    - numpy<2.0
+    - matplotlib
+    - libigl
+    - https://github.com/NVlabs/nvdiffrast/archive/main.zip
+
+    # these 4 are for NJF. I need cholespy for my own solver; latter 3 are NJF-only
+    - cholespy
+    # - easydict
+    # - torch-scatter
+    # - torch-sparse
+
+    # required by textdeformer rendering misc
+    - PyGLM
+    # - kornia
+    - imageio  # this is needed by nvdiffmodeling
+
+    # # clip, for metrics
+    # - ftfy  # fixes mojibake, required by clip
+    # - https://github.com/openai/CLIP/archive/main.zip
