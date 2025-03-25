@@ -16,6 +16,7 @@
   --fore: #363636;
   --bordrad: 10px;
   --accentbordersz: 1px none;
+  --halfwidthflex-w: 90%;
 }
 
 body {
@@ -178,20 +179,27 @@ h2 {
   }
 }
 
-.teaser {
-  >.teaserbox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
 
-    >img {
-      margin-left: -15px;
-      margin-right: -15px;
-      flex: initial;
-    }
+.imgsflex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  >img {
+    flex: initial;
+  }
+
+  .marginhack {
+    margin-left: -15px;
+    margin-right: -15px;
   }
 }
+
+.flexgap {
+  gap: 8px;
+}
+
 
 section {
   margin: 4px auto;
@@ -209,9 +217,22 @@ section {
   margin: 0px auto;
 }
 
+.medsmallwidth {
+  display: block;
+  width: calc(1.2 * var(--halfwidthflex-w));
+  margin: 0px auto;
+}
+
+.smallwidth {
+  display: block;
+  width: calc(0.9 * var(--halfwidthflex-w));
+  margin: 0px auto;
+}
+
 .halfwidthflex {
   display: block;
-  width: 90%;
+  width: var(--halfwidthflex-w);
+  margin: 0px auto;
 }
 
 p {
@@ -271,10 +292,6 @@ i.med-nbsp:before {
   section {
     width: calc(94.5vw - 30px);
     padding: 15px 15px;
-
-    .mediumwidth {
-      width: 100%;
-    }
   }
 
   h1 {
@@ -285,9 +302,14 @@ i.med-nbsp:before {
     font-size: 1.3rem;
   }
 
-  .halfwidthflex {
-    width: 90%;
+  :root {
+    --halfwidthflex-w: 90%;
   }
+
+  .mediumwidth {
+    width: 100%;
+  }
+
 }
 
 
@@ -319,9 +341,10 @@ i.med-nbsp:before {
   }
 
 
-  .halfwidthflex {
-    width: 81%;
+  :root {
+    --halfwidthflex-w: 81%;
   }
+
 }
 
 @media (min-width: 430px) {
@@ -352,9 +375,6 @@ i.med-nbsp:before {
     width: calc(72vw + 80px - 30px);
     padding: 25px 25px;
 
-    .mediumwidth {
-      width: 92.5%;
-    }
   }
 
   h1 {
@@ -365,9 +385,14 @@ i.med-nbsp:before {
     font-size: 1.8rem;
   }
 
-  .halfwidthflex {
-    width: 70%;
+  :root {
+    --halfwidthflex-w: 70%;
   }
+
+  .mediumwidth {
+    width: 92.5%;
+  }
+
 }
 
 @media (min-width: 900px) {
@@ -391,9 +416,6 @@ i.med-nbsp:before {
     width: calc(60vw + 190px - 30px);
     padding: 30px 30px;
 
-    .mediumwidth {
-      width: 90%;
-    }
   }
 
   h1 {
@@ -404,9 +426,14 @@ i.med-nbsp:before {
     font-size: 2rem;
   }
 
-  .halfwidthflex {
-    width: 50%;
+  :root {
+    --halfwidthflex-w: 49%;
   }
+
+  .mediumwidth {
+    width: 90%;
+  }
+
 
   i.med-nbsp:before {
     content: "\a0";
@@ -429,9 +456,6 @@ i.med-nbsp:before {
     width: calc(50vw + 280px - 30px);
     padding: 35px 35px;
 
-    .mediumwidth {
-      width: 85%;
-    }
   }
 
   h1 {
@@ -442,8 +466,12 @@ i.med-nbsp:before {
     font-size: 2.3rem;
   }
 
-  .halfwidthflex {
-    width: 50%;
+  :root {
+    --halfwidthflex-w: 49%;
+  }
+
+  .mediumwidth {
+    width: 85%;
   }
 }
 
