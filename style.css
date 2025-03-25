@@ -291,7 +291,7 @@ i.med-nbsp:before {
 
   section {
     width: calc(94.5vw - 30px);
-    padding: 15px 15px;
+    padding: 7px 15px;
   }
 
   h1 {
@@ -329,7 +329,7 @@ i.med-nbsp:before {
 
   section {
     width: calc(92.5vw - 30px);
-    padding: 20px 20px;
+    padding: 9px 20px;
   }
 
   h1 {
@@ -373,7 +373,7 @@ i.med-nbsp:before {
 
   section {
     width: calc(72vw + 80px - 30px);
-    padding: 25px 25px;
+    padding: 11px 25px;
 
   }
 
@@ -414,7 +414,7 @@ i.med-nbsp:before {
 
   section {
     width: calc(60vw + 190px - 30px);
-    padding: 30px 30px;
+    padding: 12px 30px;
 
   }
 
@@ -454,7 +454,7 @@ i.med-nbsp:before {
 
   section {
     width: calc(50vw + 280px - 30px);
-    padding: 35px 35px;
+    padding: 15px 35px;
 
   }
 
