@@ -18,7 +18,6 @@ import resize_right
 import td_camera
 import csd
 import deformations_dARAP
-import vectoradam
 
 if TYPE_CHECKING:
     from NeuralJacobianFields.SourceMesh import SourceMesh as NJFSourceMesh
@@ -140,7 +139,7 @@ class DeformByCSD_Settings(Thronfig):
     """
 
     optimizer_type: deformations_dARAP.OptimizerTypeName
-    """ Adam or VectorAdam. I basically default to Adam """
+    """ only Adam """
 
     n_accum_iters: int
     """
@@ -277,28 +276,8 @@ def make_optimizer(
             },
         )
         return torch.optim.Adam(paramgroups)
-    elif optimizer_type == "VectorAdam":
-        # figure out the vectoradam axis and view_before_axis for the main tensor
-        if quantity_being_optimized.this_is in ("faces_normals", "verts_normals"):
-            view_before_axis = None
-            axis = -1
-        else:
-            view_before_axis = None
-            axis = None
-        # other shared params should not need any special axis handling in vectoradam... but
-        # this might change (very highly likely NOT though)
-        paramgroups = (
-            {
-                "params": (quantity_being_optimized.tensor,),
-                "lr": main_init_lr,
-                "axis": axis,
-                "view_before_axis": view_before_axis,
-                "this_is": "main",
-            },
-        )
-        return vectoradam.VectorAdam(paramgroups)
     else:
-        raise InvalidConfigError("unknown optimizer type, use Adam or VectorAdam")
+        raise InvalidConfigError("unknown optimizer type, use Adam")
 
 
 def set_learning_rate(
@@ -795,11 +774,8 @@ def submain_deform_meshes_by_csd(
     # faces_packed (sum n faces from all meshes, 3) and so on).
 
     #### my sparse laplacians solver
-    # alongside njf_solver (SourceMesh from NJF code) which is stored per mesh
-    # in its respective mesh_struct, I have my own solver which operates on
-    # pytorch3d batched meshes so only one instance has to be made (and not one
-    # for every item in meshes_structs and stored within it). Only needed for
-    # non-njfpoisson solve methods
+    # operates on pytorch3d batched meshes so only one instance has to be made
+    # (and not one for every item in meshes_structs and stored within it)
     solve_method = deform_by_csd_cfg.solve_method
     if solve_method == "poisson" or solve_method == "arap":
         maybe_my_solver = deformations_dARAP.SparseLaplaciansSolvers.from_meshes(

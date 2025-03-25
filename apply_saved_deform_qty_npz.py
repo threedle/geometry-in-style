@@ -172,7 +172,6 @@ def main():
     # ^ 'true' 'false' to be consistent with json lowercase bools which are what Thronfig parses
     namespace, remaining_cli_args = parser.parse_known_args()
     device = torch.device("cuda")
-    print(namespace.load_cfg_from_npz)
     config, patient_v, patient_f, quantity_struct, deformed_verts = (
         load_saved_deform_and_apply(
             namespace.fname,

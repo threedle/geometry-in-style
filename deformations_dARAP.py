@@ -304,38 +304,11 @@ def calc_sum_incident_face_area_per_vertex(
 
 ########################################### end misc utils
 
-
-# if TYPE_CHECKING:
-#     batched_svd = torch.linalg.svd
-# else:
-#     try:
-#         import torch_batch_svd  # type: ignore
-
-#         batched_svd = torch_batch_svd.svd
-#     except ImportError:
-#         thlog.info("couldn't import torch_batch_svd, using torch.linalg.svd")
-#         batched_svd = torch.linalg.svd
-# NOTE seems like torch_batch_svd doesn't behave well in sds training but torch.linalg.svd is fine...
-# either that or I didn't do the solve correctly, but fewer deps is better so this is fine
-batched_svd = torch.linalg.svd
-
-
-# obsolete behaviors toggleable with an env var
-DARAPPASTFEATURE__WRONG_ROT_AVERAGING = bool(
-    os.environ.get("DARAPPASTFEATURE__WRONG_ROT_AVERAGING", False)
-)
-DARAPPASTFEATURE__WRONG_PROCRUSTES_NEIGHBORHOOD = bool(
-    os.environ.get("DARAPPASTFEATURE__WRONG_PROCRUSTES_NEIGHBORHOOD", False)
-)
-if DARAPPASTFEATURE__WRONG_PROCRUSTES_NEIGHBORHOOD:
-    print("using DARAPPASTFEATURE__WRONG_PROCRUSTES_NEIGHBORHOOD")
-
-
 ARAPEnergyTypeName = Literal[
     "spokes_mine", "spokes_and_rims_mine", "spokes_igl", "spokes_and_rims_igl"
 ]
 
-OptimizerTypeName = Literal["Adam", "VectorAdam"]
+OptimizerTypeName = Literal["Adam"]
 
 
 DeformOptimQuantityName = Literal[
@@ -699,51 +672,30 @@ class ProcrustesPrecompute:
             v0i = int(v0i_.item())
             v1i = int(v1i_.item())
             v2i = int(v2i_.item())
-            if DARAPPASTFEATURE__WRONG_PROCRUSTES_NEIGHBORHOOD:
-                # i failed to distinguish between edge directions and was
-                # missing the other direction of edges for spokes-and-rims
-                e01i = (v0i, v1i) if v0i < v1i else (v1i, v0i)
-                e12i = (v1i, v2i) if v1i < v2i else (v2i, v1i)
-                e20i = (v2i, v0i) if v2i < v0i else (v0i, v2i)
-                # add spokes
-                pcev0_set = pcepv_packed[v0i]
-                pcev1_set = pcepv_packed[v1i]
-                pcev2_set = pcepv_packed[v2i]
-                pcev0_set.add(e01i)
+
+            # correct procrustes neighborhood with directed edges, and each face
+            # only contributing the edges that go in its CCW orientation
+            e01i = (v0i, v1i)
+            e12i = (v1i, v2i)
+            e20i = (v2i, v0i)
+
+            pcev0_set = pcepv_packed[v0i]
+            pcev1_set = pcepv_packed[v1i]
+            pcev2_set = pcepv_packed[v2i]
+
+            # add spokes (radiating from vertex)
+            pcev0_set.add(e01i)
+            pcev1_set.add(e12i)
+            pcev2_set.add(e20i)
+            if need_spokes_and_rims:
+                # other face-edge pointing to vertex
                 pcev0_set.add(e20i)
-                pcev1_set.add(e12i)
                 pcev1_set.add(e01i)
-                pcev2_set.add(e20i)
                 pcev2_set.add(e12i)
-                if need_spokes_and_rims:
-                    pcev0_set.add(e12i)
-                    pcev1_set.add(e20i)
-                    pcev2_set.add(e01i)
-
-            else:
-                # correct procrustes neighborhood with directed edges, and each face
-                # only contributing the edges that go in its CCW orientation
-                e01i = (v0i, v1i)
-                e12i = (v1i, v2i)
-                e20i = (v2i, v0i)
-
-                pcev0_set = pcepv_packed[v0i]
-                pcev1_set = pcepv_packed[v1i]
-                pcev2_set = pcepv_packed[v2i]
-
-                # add spokes (radiating from vertex)
-                pcev0_set.add(e01i)
-                pcev1_set.add(e12i)
-                pcev2_set.add(e20i)
-                if need_spokes_and_rims:
-                    # other face-edge pointing to vertex
-                    pcev0_set.add(e20i)
-                    pcev1_set.add(e01i)
-                    pcev2_set.add(e12i)
-                    # rims
-                    pcev0_set.add(e12i)
-                    pcev1_set.add(e20i)
-                    pcev2_set.add(e01i)
+                # rims
+                pcev0_set.add(e12i)
+                pcev1_set.add(e20i)
+                pcev2_set.add(e01i)
 
         cell_neighborhood_n_edges = tuple(map(len, pcepv_packed))
         max_cell_neighborhood_n_edges = max(cell_neighborhood_n_edges)
@@ -972,7 +924,7 @@ def calc_rot_matrices_with_procrustes(
     # covar = covar.transpose(-1, -2)
 
     # batch svd this thing
-    uu, ss, vvt = batched_svd(covar)
+    uu, ss, vvt = torch.linalg.svd(covar)
     # vvt[:, [0, 1]] *= -1  # it does not work if i don't do this
     # not inplace:
     vvt = torch.stack((-vvt[:, 0], -vvt[:, 1], vvt[:, 2]), dim=1)
@@ -1689,8 +1641,6 @@ def get_igl_arap_energy_type_from_cfg(
         or arap_energy_type == "spokes_mine"
         or arap_energy_type == "spokes_and_rims_mine"
     ):
-        # spokes_mine is my own rhs impl directly from the 2004 paper, don't use IGL
-        # spokes_and_rims_mine is my attempt at reverse engineering the IGL spokes_and_rims?
         igl_arap_energy_type = None
     elif arap_energy_type == "spokes_igl":
         igl_arap_energy_type = IGL_ARAPEnergyType.SPOKES
@@ -1798,36 +1748,6 @@ def average_face_quaternions_onto_vertex_quaternions(
     eigh = torch.linalg.eigh(out_A)  # named tuple (eigenvalues, eigenvectors)
     out_Q = eigh.eigenvectors[:, :, -1]
 
-    # if thlog.logguard(LOG_TRACE):
-    #     __eigvals = eigh.eigenvalues.detach()
-    #     # # there are 4 eigenvalues ordered ascending, just check pairwise isclose in order
-    #     # close01 = torch.isclose(__eigvals[:, 0], __eigvals[:, 1])
-    #     # close12 = torch.isclose(__eigvals[:, 1], __eigvals[:, 2])
-    #     # close23 = torch.isclose(__eigvals[:, 2], __eigvals[:, 3])
-    #     # if close01.any():
-    #     #     argwhere = close01.argwhere()
-    #     #     thlog.trace(f"eigvals 01 hit allclose! relevant eigvals rows: {__eigvals[argwhere[:, 0]]} how many? {argwhere.shape}")
-    #     # if close12.any():
-    #     #     argwhere = close12.argwhere()
-    #     #     thlog.trace(f"eigvals 12 hit allclose! relevant eigvals rows: {__eigvals[close12.argwhere()[:, 0]]} how many? {argwhere.shape} ")
-    #     # if close23.any():
-    #     #     argwhere = close23.argwhere()
-    #     #     thlog.trace(f"eigvals 23 hit allclose! relevant eigvals rows: {__eigvals[close23.argwhere()[:, 0]]} how many? {argwhere.shape} ")
-    #     # # after doing the above, seems like all the offending eigvals is [0,0,0,1] what matrix did they correspond to?
-    #     __eigvals1zero = (__eigvals[:, 1] == 0)
-    #     if __eigvals1zero.any():
-    #         where = torch.where(__eigvals1zero)[0]
-    #         # print out the out_A matrix
-    #         thlog.trace(f"found eigval1 zero at {where}, \n the out_A matrices that gave these are\n{(__outawhere := out_A[where])}\n\nare these <1e-20? {(__outawhereabs:=__outawhere.abs()) < 1e-20}\n are these <1e-15? {__outawhereabs < 1e-15 }\n are these <1e-12? {__outawhereabs < 1e-12} \nselected 'normal' out_A examples (first 10):\n{out_A[:10]}")
-    #         # seems like all the cases where this happens are with this exact matrix:
-    #         #[[0.2500, 0.0000, 0.0000, 0.0000],
-    #         # [0.0000, 0.0000, 0.0000, 0.0000],
-    #         # [0.0000, 0.0000, 0.0000, 0.0000],
-    #         # [0.0000, 0.0000, 0.0000, 0.0000]]
-    #         # the intended last-eigenvec for this is [1,0,0,0]
-    #         # HACK so perhaps I could just check some arbitrary two elements to be exactly zero.
-    #         # the main diag (1,1), (2,2) perhaps, plus making sure that (0,0) is nonzero just to be safe
-
     return out_Q
 
 
@@ -1853,7 +1773,7 @@ def applymethod__avg_face_rotations_into_ARAP_solve(
     patient_meshes_verts = patient_meshes.verts_packed()
     patient_meshes_faces = patient_meshes.faces_packed()
     patient_meshes_faces_areas = patient_meshes.faces_areas_packed()
-    do_matrix_avg = DARAPPASTFEATURE__WRONG_ROT_AVERAGING or rotations_are_3x2_repr
+    do_matrix_avg = rotations_are_3x2_repr
     last_dim_shape = 2 if rotations_are_3x2_repr else 3
 
     # since ARAP and normal analogies uses per-vertex rotations, we might
