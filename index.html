@@ -80,31 +80,39 @@
     <figcaption class="promptprefix">a 3d render of&hellip;</figcaption>
     <div class="imgsflex">
       <figure class="qtrwidthflex">
-        <video class="srcshape" style="margin: 0 -11%" src="assets/animrenders/animrender-0314-106clean-remesh.mp4"
-          autoplay loop></video>
-        <video class="rsltshape" style="margin: 0 -9.5%"
-          src="assets/animrenders/animrender-reslt-11-04.314-pineapplethemedvase.mp4" autoplay loop></video>
+        <video class="srcshape" style="margin: 0 -11%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-0314-106clean-remesh.mp4" type="video/mp4">
+        </video>
+        <video class="rsltshape" style="margin: 0 -9.5%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-reslt-11-04.314-pineapplethemedvase.mp4" type="video/mp4">
+        </video>
         <figcaption class="promptcaption">a pineapple-themed vase</figcaption>
       </figure>
       <figure class="qtrwidthflex">
-        <video class="srcshape" style="margin: 0 -12%" src="assets/animrenders/animrender-person-remesh.mp4" autoplay
-          loop></video>
-        <video class="rsltshape" style="margin: 0 -8%"
-          src="assets/animrenders/animrender-reslt-11-06.204-knightinarmor.mp4" autoplay loop></video>
+        <video class="srcshape" style="margin: 0 -12%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-person-remesh.mp4" type="video/mp4">
+        </video>
+        <video class="rsltshape" style="margin: 0 -8%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-reslt-11-06.204-knightinarmor.mp4" type="video/mp4">
+        </video>
         <figcaption class="promptcaption">an A-pose knight in armor</figcaption>
       </figure>
       <figure class="qtrwidthflex">
-        <video class="srcshape" style="margin: 0 -11%" src="assets/animrenders/animrender-0305-rocking-chair.mp4"
-          autoplay loop></video>
-        <video class="rsltshape" style="margin: 0 -7%"
-          src="assets/animrenders/animrender-reslt-11-04.305-cuteanimalthemedchair.mp4" autoplay loop></video>
+        <video class="srcshape" style="margin: 0 -11%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-0305-rocking-chair.mp4" type="video/mp4">
+        </video>
+        <video class="rsltshape" style="margin: 0 -7%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-reslt-11-04.305-cuteanimalthemedchair.mp4" type="video/mp4">
+        </video>
         <figcaption class="promptcaption">a cute animal-themed chair</figcaption>
       </figure>
       <figure class="qtrwidthflex">
-        <video class="srcshape" style="margin: 0 -9%; width: 39%"
-          src="assets/animrenders/animrender-0313-coseg-goat-remesh.mp4" autoplay loop></video>
-        <video class="rsltshape" style="margin: 0 -5%" src="assets/animrenders/animrender-reslt-11-04.313-legogoat.mp4"
-          autoplay loop></video>
+        <video class="srcshape" style="margin: 0 -9%; width: 39%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-0313-coseg-goat-remesh.mp4" type="video/mp4">
+        </video>
+        <video class="rsltshape" style="margin: 0 -5%" autoplay muted loop playsinline>
+          <source src="assets/animrenders/animrender-reslt-11-04.313-legogoat.mp4" type="video/mp4">
+        </video>
         <figcaption class="promptcaption">a lego goat</figcaption>
       </figure>
     </div>
@@ -162,7 +170,8 @@
 
       <br><br>
       <b>One local step-global step pair.</b> Our dARAP method is meant to be part of the "forward
-      pass" in a larger optimization pipeline. As such, we do not iterate the local and global steps as in classical ARAP optimizations, instead relying on
+      pass" in a larger optimization pipeline. As such, we do not iterate the local and global steps as in classical
+      ARAP optimizations, instead relying on
       gradient descent to optimize the deformation quantity (per-vertex normals) to attain the desired deformation in
       one pass. We adjust the <em>λ</em> hyperparameter to allow the required strength in this one iteration.
     </p>
