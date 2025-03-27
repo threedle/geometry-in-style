@@ -79,7 +79,7 @@
   <section class="teaser">
     <figcaption class="promptprefix">a 3d render of&hellip;</figcaption>
     <div class="imgsflex">
-      <figure class="qtrwidthflex">
+      <figure class="qtrwidthflex vidloadsync">
         <video class="srcshape" style="margin: 0 -11%" autoplay muted loop playsinline>
           <source src="assets/animrenders/animrender-0314-106clean-remesh.mp4" type="video/mp4">
         </video>
@@ -88,7 +88,7 @@
         </video>
         <figcaption class="promptcaption">a pineapple-themed vase</figcaption>
       </figure>
-      <figure class="qtrwidthflex">
+      <figure class="qtrwidthflex vidloadsync">
         <video class="srcshape" style="margin: 0 -12%" autoplay muted loop playsinline>
           <source src="assets/animrenders/animrender-person-remesh.mp4" type="video/mp4">
         </video>
@@ -97,7 +97,7 @@
         </video>
         <figcaption class="promptcaption">an A-pose knight in armor</figcaption>
       </figure>
-      <figure class="qtrwidthflex">
+      <figure class="qtrwidthflex vidloadsync">
         <video class="srcshape" style="margin: 0 -11%" autoplay muted loop playsinline>
           <source src="assets/animrenders/animrender-0305-rocking-chair.mp4" type="video/mp4">
         </video>
@@ -106,7 +106,7 @@
         </video>
         <figcaption class="promptcaption">a cute animal-themed chair</figcaption>
       </figure>
-      <figure class="qtrwidthflex">
+      <figure class="qtrwidthflex vidloadsync">
         <video class="srcshape" style="margin: 0 -9%; width: 39%" autoplay muted loop playsinline>
           <source src="assets/animrenders/animrender-0313-coseg-goat-remesh.mp4" type="video/mp4">
         </video>
@@ -117,15 +117,15 @@
       </figure>
     </div>
     <p class="graybox">
-      Guided by a text prompt, Geometry in Style produces an <b>identity-preserving stylization</b>
-      of mesh geometry. The deformation is represented and optimized via <b>per-vertex normals</b>,
-      solved into vertex displacements in an inherently regularizing manner using <b>dARAP</b>,
+      Guided by a text prompt, Geometry in Style produces an identity-preserving stylization
+      of mesh geometry. The deformation is represented and optimized via per-vertex normals,
+      solved into vertex displacements in an inherently regularizing manner using dARAP,
       a differentiable one-step adaptation of classical As-Rigid-As-Possible deformation.
     </p>
   </section>
   <section>
     <h2>Optimization overview</h2>
-    <img class="mediumwidth" src="assets/overview.png">
+    <img class="mediumwidth blcent" src="assets/overview.png">
     <p class="graybox">
       <b>Overview of an optimization iteration.</b> Using the normals undergoing optimization as a target for our
       differentiable As-Rigid-As-Possible method (dARAP), the
@@ -136,7 +136,7 @@
   </section>
   <section>
     <h2>Gallery</h2>
-    <img class="fullwidth" src="assets/gallery-downsz.png">
+    <img class="fullwidth blcent" src="assets/gallery-downsz.png">
     <p class="graybox">
       <b>Various input meshes towards a variety of text-specified styles.</b>
       The style can manifest as fine geometric details, like in the <em>ornate art deco
@@ -152,22 +152,24 @@
     <h2>Normals and differentiable&nbsp;ARAP</h2>
     <div class="imgsflex flexgap">
       <img class="halfwidthflex" src="assets/prerenderedfig-procrustes-oneline.svg">
-      <img class="smallwidth" src="assets/localstep-argmin.svg">
     </div>
-    <p class="graybox"><b>The local step. </b> Inspired by <a href="https://arxiv.org/abs/2104.11993">Normal-Driven
+    <p class="graybox toppadextra">
+      <img class="equationwidth blcent" style="--per-eqn-mult: 0.78" src="assets/localstep-argmin.svg">
+      <br>
+      <b>The local step. </b> Inspired by <a href="https://arxiv.org/abs/2104.11993">Normal-Driven
         Spherical Shape Analogies</a>, we represent a deformation by a <em>target normal per vertex</em>. These
       normals are first used as the target for a local Procrustes solve, which finds the best rotation matrix
       taking a bundle of edge vectors (a spokes-and-rims neighborhood of halfedges, plus the original normal) to the
       same neighborhood but with the target normal. A <em>λ</em> hyperparameter controls the strength of the rotation
       solution towards the target normal. This solve is made batched and differentiable.
     </p>
-    <br>
-    <img class="medsmallwidth" src="assets/globalstep-argmin.svg">
-    <p class="graybox"><b>The global step.</b> Fixing the per-vertex rotations, we then find the best fit deformed
+    <p class="graybox toppadextra">
+      <img class="equationwidth blcent" src="assets/globalstep-argmin.svg">
+      <br>
+      <b>The global step.</b> Fixing the per-vertex rotations, we then find the best fit deformed
       vertex positions. This least-squares optimization turns into a Poisson equation with the cotangent laplacian as
       the system matrix, so we can use the differentiable solving technique from <a
         href="https://arxiv.org/abs/2205.02904">Neural Jacobian Fields</a>.
-
       <br><br>
       <b>One local step-global step pair.</b> Our dARAP method is meant to be part of the "forward
       pass" in a larger optimization pipeline. As such, we do not iterate the local and global steps as in classical
@@ -182,11 +184,10 @@
       <img class="halfwidthflex" style="width: calc(0.74 * var(--halfwidthflex-w))" src="assets/sameshape3row.png">
       <img class="halfwidthflex" src="assets/samestyle-lego.png">
     </div>
-    <p class="graybox">
-      Our method performs diverse shape stylizations that adhere to the target style prompt with high
-      detail. We can deform the <b>same source shape with different prompts</b>; the different styles conform and adapt
+    <p class="graybox">Our method performs diverse shape stylizations that adhere to the target style prompt with high
+      detail. We can deform the same source shape with different prompts; the different styles conform and adapt
       to the source geometry while adding salient geometric texture and detail to semantically appropriate parts.
-      <b>Target styles are also robust to different source shapes</b>; even for shapes with very different geometry, the
+      Target styles are also robust to different source shapes; even for shapes with very different geometry, the
       <em>lego</em> style is consistently conveyed with a lego brick-like surface pattern and cubified geometry.
     </p>
   </section>
@@ -198,13 +199,31 @@
         src="assets/localdeform-spotbulldog.png">
     </div>
     <p class="graybox">Normals found by optimization using a particular <em>λ</em> value can be conveniently
-      <b>re-applied after optimization</b> using a different <em>λ</em> to tune the stylization strength on demand.
+      re-applied after optimization using a different <em>λ</em> to tune the stylization strength on demand.
       Both larger and smaller <em>λ</em> result in salient and clean stylizations at the required strength.
-      The <b>deformation region can also be controlled</b> (either during or after optimization) by setting
+      The deformation region can also be controlled (either during or after optimization) by setting
       rotation matrices of vertices outside the region to identity before the global solve.
-      We observe no boundary artifacts, showing dARAP's <b>beneficial regularizing effects</b>.
+      We observe no boundary artifacts, showing dARAP's beneficial regularizing effects.
     </p>
   </section>
+  <script>
+    // upon load, restart and sync the other video in the pair
+    const vidloadsyncers = document.getElementsByClassName("vidloadsync");
+    for (const elem of vidloadsyncers) {
+      const srcshapeVid = elem.getElementsByClassName("srcshape").item(0);
+      const rsltshapeVid = elem.getElementsByClassName("rsltshape").item(0);
+      srcshapeVid?.addEventListener("loadeddata", e => {
+        if (rsltshapeVid) {
+          rsltshapeVid.currentTime = 0;
+        }
+      });
+      rsltshapeVid?.addEventListener("loadeddata", e => {
+        if (srcshapeVid) {
+          srcshapeVid.currentTime = 0;
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>

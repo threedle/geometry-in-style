@@ -17,6 +17,8 @@
   --bordrad: 10px;
   --accentbordersz: 1px none;
   --halfwidthflex-w: 90%;
+  --medwidthflex-w: 100%;
+  --eqnwidthmult: 0.95;
 }
 
 body {
@@ -61,7 +63,7 @@ h2 {
     box-shadow: var(--buttonshadowsz) var(--notwhite-shaded), var(--dropshadow);
     border-radius: var(--bordrad);
 
-    img {
+    >img {
       width: 96%;
       margin: auto auto;
     }
@@ -260,27 +262,30 @@ section {
 }
 
 
-.fullwidth {
+.blcent {
   display: block;
+  margin: 0 auto;
+}
+
+.fullwidth {
   width: 100%
 }
 
 .mediumwidth {
-  display: block;
-  width: 85%;
-  margin: 0px auto;
+  width: var(--medwidthflex-w);
 }
 
 .medsmallwidth {
-  display: block;
   width: calc(1.2 * var(--halfwidthflex-w));
-  margin: 0px auto;
+}
+
+.equationwidth {
+  --per-eqn-mult: 1;
+  width: calc(var(--per-eqn-mult) * var(--eqnwidthmult) * var(--medwidthflex-w));
 }
 
 .smallwidth {
-  display: block;
   width: calc(0.9 * var(--halfwidthflex-w));
-  margin: 0px auto;
 }
 
 .halfwidthflex {
@@ -298,8 +303,13 @@ p {
   border-radius: var(--bordrad);
   box-shadow: var(--buttonshadowsz) var(--notwhite-shaded), var(--dropshadow);
   background-color: var(--notwhite);
+  padding: 1.2rem 1.6rem;
 }
 
+
+.toppadextra {
+  padding-top: 1.6rem;
+}
 
 h2 {
   margin-left: auto;
@@ -310,9 +320,6 @@ h2 {
   padding: 4px 1.2rem;
 }
 
-.graybox {
-  padding: 1.2rem 1.6rem;
-}
 
 i.nbsp:before {
   content: "\a0"
@@ -358,11 +365,10 @@ i.med-nbsp:before {
 
   :root {
     --halfwidthflex-w: 90%;
+    --medwidthflex-w: 100%;
+    --eqnwidthmult: 1.1;
   }
 
-  .mediumwidth {
-    width: 100%;
-  }
 
 }
 
@@ -397,6 +403,7 @@ i.med-nbsp:before {
 
   :root {
     --halfwidthflex-w: 81%;
+    --eqnwidthmult: 1;
   }
 
 }
@@ -441,11 +448,10 @@ i.med-nbsp:before {
 
   :root {
     --halfwidthflex-w: 70%;
+    --medwidthflex-w: 92.5%;
+    --eqnwidthmult: 0.82;
   }
 
-  .mediumwidth {
-    width: 92.5%;
-  }
 
 }
 
@@ -482,10 +488,8 @@ i.med-nbsp:before {
 
   :root {
     --halfwidthflex-w: 49%;
-  }
-
-  .mediumwidth {
-    width: 90%;
+    --medwidthflex-w: 90%;
+    --eqnwidthmult: 0.65;
   }
 
 
@@ -522,11 +526,10 @@ i.med-nbsp:before {
 
   :root {
     --halfwidthflex-w: 49%;
+    --medwidthflex-w: 85%;
+    --eqnwidthmult: 0.55;
   }
 
-  .mediumwidth {
-    width: 85%;
-  }
 }
 
 @media (min-width: 1700px) {
