@@ -179,6 +179,60 @@ h2 {
   }
 }
 
+video {
+  position: relative;
+}
+
+.qtrwidthflex {
+  display: block;
+  width: calc(0.5 * var(--halfwidthflex-w));
+  margin: 0px auto;
+}
+
+.teaser {
+  --promptfontsz: 1.1rem;
+
+  .promptprefix {
+    font-size: var(--promptfontsz);
+    color: #717171;
+    font-style: italic;
+  }
+
+  .promptprefix::before {
+    content: '';
+    background-image: url("https://cdn0.iconfinder.com/data/icons/phosphor-bold-vol-3-1/256/pencil-line-duotone-128.png");
+    opacity: 0.5;
+    display: inline-block;
+    background-size: var(--promptfontsz) var(--promptfontsz);
+    width: var(--promptfontsz);
+    height: var(--promptfontsz);
+    transform: translateY(3px);
+    margin-right: 5px;
+    background-repeat: no-repeat;
+
+  }
+
+  .qtrwidthflex {
+    text-align: center;
+
+    >video.srcshape {
+      width: 42%;
+      z-index: 3;
+    }
+
+    >video.rsltshape {
+      width: 84%;
+      z-index: 2;
+    }
+
+    >.promptcaption {
+      font-size: var(--promptfontsz);
+      font-style: italic;
+      color: var(--accent);
+      text-align: center;
+    }
+  }
+}
 
 .imgsflex {
   display: flex;
@@ -186,7 +240,7 @@ h2 {
   align-items: center;
   flex-wrap: wrap;
 
-  >img {
+  >* {
     flex: initial;
   }
 
@@ -235,11 +289,11 @@ section {
   margin: 0px auto;
 }
 
+
 p {
   font-size: 1.2rem;
 }
 
-h2,
 .graybox {
   border-radius: var(--bordrad);
   box-shadow: var(--buttonshadowsz) var(--notwhite-shaded), var(--dropshadow);
@@ -295,11 +349,11 @@ i.med-nbsp:before {
   }
 
   h1 {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
   h2 {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
   :root {
@@ -333,11 +387,11 @@ i.med-nbsp:before {
   }
 
   h1 {
-    font-size: 1.45rem;
+    font-size: 1.6rem;
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: 1.55rem;
   }
 
 
