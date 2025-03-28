@@ -21,15 +21,17 @@ environment in a reasonable amount of time. Your cluster may not have this insta
 
 - Read and edit the variables at the top of `prep_sds_run_configs.sh` (up until the line `# END VARIABLES FOR CONFIG`) for this batch of runs
 - Run `bash prep_sds_run_configs.sh`. This will open an interactive prompt where you will enter the prompt and shortname (a no-space nickname to describe the prompt-and-shape pair in the filename) for each mesh in the dataset.
-- Once you've entered prompts and shortnames for every mesh in the set, you will have a bunch of config JSON files as reported by the printout.
-- Use your preferred sbatch/job scheduling method to run each of these configs with `python deform_with_csd_dARAP.py -c CONFIGFILE`.
+- Once you've entered prompts and shortnames for every mesh in the set, you will have a bunch of config JSON files as reported by the printout; each JSON file is the configuration for one run.
+- Use your preferred sbatch/job scheduling method to run each of these configs with `python deform_with_csd_dARAP.py -c CONFIGFILE` where `CONFIGFILE` is the JSON config filename for the run.
 
 ### Instructions to do one run
-- Read `v3deform_with_csd_working_config-2024-11-04.json` the current latest config.
+- Read `confg-base.json` the current latest base config.
 - Edit fields with your prompts, paths to your meshes, and run descriptions in filenames
 - Polyscope recording and result save filenames must have a valid parent directory (the code will **not** automatically `mkdir` any parent directory structure to fulfill requested save paths!)
-- To run, just do `python deform_with_csd_dARAP.py -c CONFIGFILE`
+- To run, just do `python deform_with_csd_dARAP.py -c confg-base.json` (or whatever your config filename is)
 - On the cluster (where polyscope init is not available), export the environment variable `NO_POLYSCOPE=1` before running.
+> Overriding fields on the command line is supported.
+> For instance, you can do `python deform_with_csd_dARAP.py -c CONFIGFILE --deform_by_csd.n_iters 1000` to override the `deform_by_csd.n_iters` field to be 1000 instead of the value in `CONFIGFILE`.
 
 ### Quick example run
 (replace `/usr/local/cuda-12.1` with your system's installation of the cuda dev toolkit if not that)
