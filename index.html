@@ -5,7 +5,7 @@
   <title>Geometry in Style</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- <link rel="icon" type="image/png" href="assets/icon-TODO.png"> -->
+  <link rel="icon" type="image/png" href="assets/pineapple-icon-144.png">
   <title>Geometry in Style</title>
   <link href="style.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -44,73 +44,99 @@
 
   <meta property='og:title' content='Geometry in Style' />
   <meta property='og:url' content='https://threedle.github.io/geometry-in-style/' />
-  <meta property='og:image' content='https://raw.githubusercontent.com/threedle/geometry-in-style/refs/heads/main/assets/teaser.png' />
+  <meta property='og:image'
+    content='https://raw.githubusercontent.com/threedle/geometry-in-style/refs/heads/main/assets/teaser.png' />
   <meta property="og:type" content="website" />
 </head>
 
 <body>
-  <section class="intro">
-    <a href="https://3dl.cs.uchicago.edu">
+  <section class="intro" aria-label="intro">
+    <a href="https://3dl.cs.uchicago.edu" aria-label="3DL threedle home">
       <div class="logobox">
-        <img src="assets/threedle-icon-160.png">
+        <img src="assets/threedle-icon-160.png" alt="3DL threedle logo">
       </div>
     </a>
     <div class="titlebox">
-      <h1>Geometry in<i class="med-nbsp"></i>Style:<wbr> 3D<i class="med-nbsp"></i>Stylization via Surface<i
-          class="wide-nbsp"></i>Normal<i class="wide-nbsp"></i>Deformation</h1>
+      <h1>Geometry in<i class="med-nbsp" aria-hidden="true"></i>Style:<wbr> 3D<i class="med-nbsp"
+          aria-hidden="true"></i>Stylization via Surface<i class="wide-nbsp" aria-hidden="true"></i>Normal<i
+          class="wide-nbsp" aria-hidden="true"></i>Deformation</h1>
     </div>
     <nav>
-      <span class="venue"><i class="icon fas fa-map-marker-alt"></i>CVPR 2025</span>
-      <a href="https://people.cs.uchicago.edu/~namanh/papers/geometry-in-style.pdf">
+      <span class="venue" aria-label="venue"><i class="icon fas fa-map-marker-alt" aria-hidden="true"></i>CVPR
+        2025</span>
+      <a href="https://people.cs.uchicago.edu/~namanh/papers/geometry-in-style.pdf" aria-label="paper pdf">
         <i class="icon fas fa-file-pdf"></i>Paper
       </a>
       <!-- <a href="#"><i class="icon ai ai-arxiv"></i>arXiv</a> -->
-      <a href="https://github.com/threedle/geometry-in-style/"><i class="icon fab fa-github"></i>Code</a>
+      <a href="https://github.com/threedle/geometry-in-style/" aria-label="code github"><i
+          class="icon fab fa-github"></i>Code</a>
     </nav>
-    <div class="authors">
+    <div class="authors" aria-label="authors">
       <span><a href="https://people.cs.uchicago.edu/~namanh/">Nam Anh Dinh</a><sup>1</sup></span>
       <span><a href="https://itailang.github.io/">Itai Lang</a><sup>1</sup></span>
       <span><a href="https://hywkim-brian.github.io/site">Hyunwoo Kim</a><sup>1</sup></span>
       <span><a href="https://odedstein.com/">Oded Stein</a><sup>2</sup></span>
       <span><a href="https://people.cs.uchicago.edu/~ranahanocka/">Rana Hanocka</a><sup>1</sup></span>
     </div>
-    <div class="affiliations"><sup>1</sup>University of Chicago, <sup>2</sup>University of Southern California</div>
+    <div class="affiliations" aria-label="affiliations"><sup>1</sup>University of Chicago, <sup>2</sup>University of
+      Southern California</div>
   </section>
-  <section class="teaser">
-    <figcaption class="promptprefix">a 3d render of&hellip;</figcaption>
+  <section class="teaser" aria-label="teaser">
+    <figcaption class="promptprefix" aria-label="prompt prefix">a 3d render of&hellip;</figcaption>
     <div class="imgsflex">
       <figure class="qtrwidthflex vidloadsync">
-        <video class="srcshape" style="margin: 0 -11%" autoplay poster="assets/animrenders-compress/poster-animrender-0314-106clean-remesh.mp4.jpg" preload muted loop playsinline>
+        <video class="srcshape" style="margin: 0 -11%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-0314-106clean-remesh.mp4.jpg" preload muted loop
+          playsinline aria-label="video of rotating gray angular vase shape">
           <source src="assets/animrenders-compress/animrender-0314-106clean-remesh.mp4" type="video/mp4">
         </video>
-        <video class="rsltshape" style="margin: 0 -9.5%" autoplay poster="assets/animrenders-compress/poster-animrender-reslt-11-04.314-pineapplethemedvase.mp4.jpg" preload muted loop playsinline>
+        <video class="rsltshape" style="margin: 0 -9.5%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-reslt-11-04.314-pineapplethemedvase.mp4.jpg" preload
+          muted loop playsinline
+          aria-label="video of rotating blue vase, the above vase but stylized to have pineapple geometric texture in body and top opening">
           <source src="assets/animrenders-compress/animrender-reslt-11-04.314-pineapplethemedvase.mp4" type="video/mp4">
         </video>
         <figcaption class="promptcaption">a pineapple-themed vase</figcaption>
       </figure>
       <figure class="qtrwidthflex vidloadsync">
-        <video class="srcshape" style="margin: 0 -12%" autoplay poster="assets/animrenders-compress/poster-animrender-person-remesh.mp4.jpg" preload muted loop playsinline>
+        <video class="srcshape" style="margin: 0 -12%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-person-remesh.mp4.jpg" preload muted loop playsinline
+          aria-label="video of rotating gray person shape">
           <source src="assets/animrenders-compress/animrender-person-remesh.mp4" type="video/mp4">
         </video>
-        <video class="rsltshape" style="margin: 0 -8%" autoplay poster="assets/animrenders-compress/poster-animrender-reslt-11-06.204-knightinarmor.mp4.jpg" preload muted loop playsinline>
+        <video class="rsltshape" style="margin: 0 -8%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-reslt-11-06.204-knightinarmor.mp4.jpg" preload muted
+          loop playsinline
+          aria-label="video of rotating blue person shape, the above person but stylized to look like a knight">
           <source src="assets/animrenders-compress/animrender-reslt-11-06.204-knightinarmor.mp4" type="video/mp4">
         </video>
         <figcaption class="promptcaption">an A-pose knight in armor</figcaption>
       </figure>
       <figure class="qtrwidthflex vidloadsync">
-        <video class="srcshape" style="margin: 0 -11%" autoplay poster="assets/animrenders-compress/poster-animrender-0305-rocking-chair.mp4.jpg" preload muted loop playsinline>
+        <video class="srcshape" style="margin: 0 -11%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-0305-rocking-chair.mp4.jpg" preload muted loop
+          playsinline aria-label="video of rotating gray rocking chair shape">
           <source src="assets/animrenders-compress/animrender-0305-rocking-chair.mp4" type="video/mp4">
         </video>
-        <video class="rsltshape" style="margin: 0 -7%" autoplay poster="assets/animrenders-compress/poster-animrender-reslt-11-04.305-cuteanimalthemedchair.mp4.jpg" preload muted loop playsinline>
-          <source src="assets/animrenders-compress/animrender-reslt-11-04.305-cuteanimalthemedchair.mp4" type="video/mp4">
+        <video class="rsltshape" style="margin: 0 -7%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-reslt-11-04.305-cuteanimalthemedchair.mp4.jpg" preload
+          muted loop playsinline
+          aria-label="video of rotating blue rocking chair, the same rocking chair but rounded with cute ears on the seat back">
+          <source src="assets/animrenders-compress/animrender-reslt-11-04.305-cuteanimalthemedchair.mp4"
+            type="video/mp4">
         </video>
         <figcaption class="promptcaption">a cute animal-themed chair</figcaption>
       </figure>
       <figure class="qtrwidthflex vidloadsync">
-        <video class="srcshape" style="margin: 0 -9%; width: 39%" autoplay poster="assets/animrenders-compress/poster-animrender-0313-coseg-goat-remesh.mp4.jpg" preload muted loop playsinline>
+        <video class="srcshape" style="margin: 0 -9%; width: 39%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-0313-coseg-goat-remesh.mp4.jpg" preload muted loop
+          playsinline aria-label="video of rotating gray goat shape">
           <source src="assets/animrenders-compress/animrender-0313-coseg-goat-remesh.mp4" type="video/mp4">
         </video>
-        <video class="rsltshape" style="margin: 0 -5%" autoplay poster="assets/animrenders-compress/poster-animrender-reslt-11-04.313-legogoat.mp4.jpg" preload muted loop playsinline>
+        <video class="rsltshape" style="margin: 0 -5%" autoplay
+          poster="assets/animrenders-compress/poster-animrender-reslt-11-04.313-legogoat.mp4.jpg" preload muted loop
+          playsinline
+          aria-label="video of rotating blue goat, the above goat but stylized with a blocky lego-like body and neck and head">
           <source src="assets/animrenders-compress/animrender-reslt-11-04.313-legogoat.mp4" type="video/mp4">
         </video>
         <figcaption class="promptcaption">a lego goat</figcaption>
@@ -125,7 +151,8 @@
   </section>
   <section>
     <h2>Optimization overview</h2>
-    <img class="mediumwidth blcent" src="assets/overview.png">
+    <img class="mediumwidth blcent" src="assets/overview.png"
+      alt="process diagram. gray vase shape (labeled 'input mesh'), with zoomed in inset showing local vertex neighborhood at vertex k, having a current normal u_k and target normal u_k hat with a depiction of rotation R_k hat from current to target. inset zooms back out to show R_k hat as part of a vector of R from all vertices stacked (labeled 'local rotations'). this stack goes to a 'global solve' step illustrated as the blue pineapple styled vase. depictions of cameras surround the right side, next to a column of images labeled 'differentiable rendering'; this result goes to a 'semantic loss' block with the prompt going into it; the loss is backpropagated to target normals from the vertex neighborhood">
     <p class="graybox">
       <b>Overview of an optimization iteration.</b> Using the normals undergoing optimization as a target for our
       differentiable As-Rigid-As-Possible method (dARAP), the
@@ -136,7 +163,8 @@
   </section>
   <section>
     <h2>Gallery</h2>
-    <img class="fullwidth blcent" src="assets/gallery-downsz.png">
+    <img class="fullwidth blcent" src="assets/gallery-downsz.png"
+      alt="gallery of results, source shapes in gray and deformed in blue. a 3d render of... antique sofa, tropical chair, racing chair, greek statue chair, gothic chair, cardboard chair, cybernetic glove, skull, dinosaur statue, ornate art deco column (from a candle as source shape), penguin themed fire hydrant, racer bunny (with wheels for thighs)">
     <p class="graybox">
       <b>Various input meshes towards a variety of text-specified styles.</b>
       The style can manifest as fine geometric details, like in the <em>ornate art deco
@@ -151,7 +179,8 @@
   <section>
     <h2>Normals and differentiable&nbsp;ARAP</h2>
     <div class="imgsflex flexgap">
-      <img class="halfwidthflex" src="assets/prerenderedfig-procrustes-oneline.svg">
+      <img class="halfwidthflex" src="assets/prerenderedfig-procrustes-oneline.svg"
+        alt="diagram showing procrustes local step; local neighborhood with vertex and neighboring edges and one-ring; vertex has current normal and target normal pointing out of it; panel showing the neighborhood of spokes-and-rims edges and the current normal, right arrow, question mark R in SO(3) (illustrating solving the procrustes problem), towards a panel showing the same neighborhood but with target normal. captioned 'local orthogonal procrustes problem'">
     </div>
     <p class="graybox toppadextra">
       <img class="equationwidth blcent" style="--per-eqn-mult: 0.78" src="assets/localstep-argmin.svg">
@@ -181,8 +210,10 @@
   <section>
     <h2>Expressiveness and specificity</h2>
     <div class="imgsflex">
-      <img class="halfwidthflex" style="width: calc(0.74 * var(--halfwidthflex-w))" src="assets/sameshape3row.png">
-      <img class="halfwidthflex" src="assets/samestyle-lego.png">
+      <img class="halfwidthflex" style="width: calc(0.74 * var(--halfwidthflex-w))" src="assets/sameshape3row.png"
+        alt="same-shapes deformed towards different prompts. first row: person shape, prompts 'Chinese terracotta warrior', 'balloon person',  'samurai warrior in traditional armor'; second row basic chair shape, prompts are 'origami chair', 'butterfly-themed chair', 'church pulpit'; third row candle shape, prompts are 'retro game joystick', 'braided pillar candle', 'upright fountain pen'">
+      <img class="halfwidthflex" src="assets/samestyle-lego.png"
+        alt="shapes deformed towards the same lego prompt, three rows. first row: three chairs deformed with 'lego chair' prompt, variety of geometries made into blocky lego style. second row: animals, camel dog pig, deformed towards lego corresponding animal name. third row: three vases deformed towards 'vase made of lego bricks'">
     </div>
     <p class="graybox">Our method performs diverse shape stylizations that adhere to the target style prompt with high
       detail. We can deform the same source shape with different prompts; the different styles conform and adapt
@@ -194,9 +225,11 @@
   <section>
     <h2>Controllable strength and region</h2>
     <div class="imgsflex">
-      <img class="halfwidthflex" src="assets/lambdatweak-robotlion.png">
+      <img class="halfwidthflex" src="assets/lambdatweak-robotlion.png"
+        alt="source gray lion shape deformed towards 'a 3d render of a robot lion' prompt; three deformed results, first one at lambda=5 is a subtle robot style with sharp edges on body but smooth; second one at lambda=8 (lambda used at optimization) is a nice salient robot style with mechanical legs and joints and waist; lambda=11 very prominent robot style with exaggerated sharp features from the previous ones, with sharp mechanical looking parts and joints">
       <img class="halfwidthflex" style="width: calc(0.5 * var(--halfwidthflex-w))"
-        src="assets/localdeform-spotbulldog.png">
+        src="assets/localdeform-spotbulldog.png"
+        alt="source cartoon cow shape with the head region highlighted in yellow; prompt 'a 3d render of a bulldog', deform result shows the head region turned into a bulldog head, rest of body unchanged">
     </div>
     <p class="graybox">Normals found by optimization using a particular <em>λ</em> value can be conveniently
       re-applied after optimization using a different <em>λ</em> to tune the stylization strength on demand.
