@@ -4,7 +4,7 @@ The official implementation for our CVPR 2025 paper.
 
 [paper](https://people.cs.uchicago.edu/~namanh/papers/geometry-in-style.pdf)
 | [project page](https://threedle.github.io/geometry-in-style/)
-| arXiv coming soon 
+| [arXiv](http://arxiv.org/abs/2503.23241)
 
 ![figure with 4 frames. top left is gray text 'a 3d render of'. underneath each frame, blue text is the rest of a prompt. The blue text lines are "a pineapple-themed vase", "an A-pose knight in armor", "a cute animal-themed chair", "a lego goat". above each prompt, a gray unmodified shape shows the source mesh (a vase, an A-pose human, a rocking chair, a goat), and the large blue mesh is the source shape deformed towards the style prompt in a vivid, detailed, but identity-preserving way.](assets/teaser.png)
 
