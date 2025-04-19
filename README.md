@@ -9,13 +9,43 @@ The official implementation for our CVPR 2025 paper.
 ![figure with 4 frames. top left is gray text 'a 3d render of'. underneath each frame, blue text is the rest of a prompt. The blue text lines are "a pineapple-themed vase", "an A-pose knight in armor", "a cute animal-themed chair", "a lego goat". above each prompt, a gray unmodified shape shows the source mesh (a vase, an A-pose human, a rocking chair, a goat), and the large blue mesh is the source shape deformed towards the style prompt in a vivid, detailed, but identity-preserving way.](assets/teaser.png)
 
 ### Environment setup
-Run
+Run this on a system with a GPU (i.e. `$ nvidia-smi` works)
 ```
 conda env create -f environment-minimal-geomstyle.yml
 ```
 > NOTE there is a small chance you may need **micromamba** instead of conda to solve this
 environment in a reasonable amount of time. Your cluster may not have this installed; follow
 [instructions here](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html) (I prefer the manual installation, putting the `micromamba` executable in your home directory somewhere if you don't have root permissions such as on a cluster.) Afterwards run conda commands using `micromamba` instead of `conda`.
+
+Optimizations were tested to work on an NVIDIA A40 (48GB) GPU. Your GPU should
+ideally have capacity to hold both `DeepFloyd/IF-I-XL-v1.0` and
+`DeepFloyd/IF-II-L-v1.0` models, though configuring `--deform_by_csd.guidance.cpu_offload true`
+may help with lower memory capacities.
+
+Either your CPU or a much less powerful GPU can be used to run `apply_saved_deform_qty_npz.py`
+which applies a saved deformation (a `nrmls-*.npz` file) to its associated mesh, with a tunable λ
+hyperparameter.
+
+No discrete GPU is required nor used for playing back `psrec-*.npz`
+Polyscope recording files of results, as long as the playback machine has a
+screen (so you can run it on your local machine, but not on a headless system.)
+
+
+**To set up HuggingFace Hub and your account for downloading the DeepFloyd stages (instructions from [DeepFloyd IF](https://github.com/deep-floyd/IF)):**
+
+1) If you do not already have one, create a [Hugging Face account](https://huggingface.co/join)
+2) Accept the license on the model card of [DeepFloyd/IF-I-XL-v1.0](https://huggingface.co/DeepFloyd/IF-I-XL-v1.0)
+3) Log in to Hugging face locally. In the conda environment you just created, install `huggingface_hub`
+```
+pip install huggingface_hub --upgrade
+```
+run the login function in a python shell
+```
+from huggingface_hub import login
+
+login()
+```
+and enter your [Hugging Face Hub access token](https://huggingface.co/docs/hub/security-tokens#what-are-user-access-tokens).
 
 ### Instructions for generating a ton of configs and running `deform_with_csd_dARAP.py`
 
@@ -33,23 +63,28 @@ environment in a reasonable amount of time. Your cluster may not have this insta
 > Overriding fields on the command line is supported.
 > For instance, you can do `python deform_with_csd_dARAP.py -c CONFIGFILE --deform_by_csd.n_iters 1000` to override the `deform_by_csd.n_iters` field to be 1000 instead of the value in `CONFIGFILE`.
 
-### Quick example run
+### Quick example run: the *cute animal-themed chair*
 (replace `/usr/local/cuda-12.1` with your system's installation of the cuda dev toolkit if not that)
 ```bash
 NO_POLYSCOPE=1 CUDA_HOME=/usr/local/cuda-12.1/ python deform_with_csd_dARAP.py -c example-run/confg-example-cuteanimalthemedchair.json
 ```
 - After this is done, you should get the recording file `example-run/psrec-deform-csdv3-example-cuteanimalthemedchair.npz` and a saved deformation quantity `example-run/nrmls-deform-csdv3-example-cuteanimalthemedchair.npz`.
-- You can extract the final mesh out of the psrec recording using
+- You can **extract the final mesh** out of the psrec recording using
 ```bash
 python scratch_extract_final_mesh_from_psrec.py example-run/psrec-deform-csdv3-example-cuteanimalthemedchair.npz
 ```
   - (that should save `example-run/reslt-deform-csdv3-example-cuteanimalthemedchair.obj`. You can compare that result with `example-run/reslt-expected-cuteanimalthemedchair.obj`. We don't  fix the seed so there may be minor aesthetic differences but the result (namely the ears) should be mostly the same.)
-- You can also play back the Polyscope recording (on a system with a display, not a headless server) with
+- You can also **play back the Polyscope recording** (on a system with a display, not a headless server) with
 ```bash
 python thlog.py replay psrec-deform-csdv3-example-cuteanimalthemedchair.npz
 ```
 - (This will show the usual Polyscope window but with a "Playback controls" window. Step through the `show`-frames of the recording by clicking the button on the "Playback controls" window that shows up.)
 
+- **To apply the saved deformation** (an optimized set of normals, saved alongside the original source mesh) such as the provided `nrmls-expected-cuteanimalthemedchair.npz` or the `nrmls-deform-csdv3-example-cuteanimalthemedchair.npz` file that is saved after the example optimization run, simply do
+```bash
+python apply_saved_deform_qty_npz.py example-run/nrmls-expected-cuteanimalthemedchair.npz
+```
+- You can also add `--cpu true` to run on a local, CPU-only machine; you can add `--lamb x` to set a different lambda hyperparameter (deformation strength) with which to apply this saved deformation (higher is stronger.) The saved lambda used during optimization is 8.0; try setting it to 5 or 10.
 
 ### Misc repro notes
 - We use pytorch3d's cotangent laplacian function which happens to use `cot a + cot b` weights rather than `0.5 * (cot a + cotb)` like libigl's `cotmatrix` function. This had no effect on our implementation of the ARAP global solve right-hand-side since the same weights are in the matrix and the right-hand-side construction, but when using the prefactored IGL `arap_rhs` right-hand-side constructor, a `2 *` correction is needed on the resulting `rhs` assuming no rescaling back to the source shape's bounding box diagonal extent.

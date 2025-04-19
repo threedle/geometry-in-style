@@ -169,9 +169,25 @@ def main():
     parser.add_argument(
         "--load_cfg_from_npz", type=str, choices=["true", "false"], default="true"
     )
+    parser.add_argument("--cpu", type=str, choices=["true", "false"], default="false")
     # ^ 'true' 'false' to be consistent with json lowercase bools which are what Thronfig parses
+    parser.add_argument("--lamb", type=float, default=None)
+    # we expose the lambda hyperparameter at the top level argparse for ease of use
+    # but all fields of are ApplySavedDeformSettings are available for CLI
+    # override due to patch_from_command_line_args run during
+    # load_saved_deform_and_apply. This --lamb x is just a shorthand for
+    # --local_step_procrustes_lambda_and_normalize [x,true]
+
     namespace, remaining_cli_args = parser.parse_known_args()
-    device = torch.device("cuda")
+    if namespace.lamb is not None:
+        procrustes_arg = "--local_step_procrustes_lambda_and_normalize"
+        if procrustes_arg in remaining_cli_args:
+            raise InvalidConfigError(
+                "if --local_step_procrustes_lambda_and_normalize is specified, do not specify --lamb x, which is merely a shorthand added to set --local_step_procrustes_lambda_and_normalize [x,true]"
+            )
+
+        remaining_cli_args.extend((procrustes_arg, f"[{namespace.lamb},true]"))
+    device = torch.device("cuda" if namespace.cpu == "false" else "cpu")
     config, patient_v, patient_f, quantity_struct, deformed_verts = (
         load_saved_deform_and_apply(
             namespace.fname,
