@@ -5,6 +5,7 @@ The official implementation for our CVPR 2025 paper.
 [paper](https://people.cs.uchicago.edu/~namanh/papers/geometry-in-style.pdf)
 | [project page](https://threedle.github.io/geometry-in-style/)
 | [arXiv](http://arxiv.org/abs/2503.23241)
+| [bibtex](#bibtex)
 
 ![figure with 4 frames. top left is gray text 'a 3d render of'. underneath each frame, blue text is the rest of a prompt. The blue text lines are "a pineapple-themed vase", "an A-pose knight in armor", "a cute animal-themed chair", "a lego goat". above each prompt, a gray unmodified shape shows the source mesh (a vase, an A-pose human, a rocking chair, a goat), and the large blue mesh is the source shape deformed towards the style prompt in a vivid, detailed, but identity-preserving way.](assets/teaser.png)
 
@@ -99,3 +100,15 @@ python apply_saved_deform_qty_npz.py example-run/nrmls-expected-cuteanimalthemed
 
 ### Type stubs
 - In the `cholespy`, `pytorch3d`, `igl` folders are type stubs (`.pyi` files) containing type signatures for the functions from those libraries we use (for a better experience with static type checkers). Feel free to use them in your own projects involving these libraries if you use a static type checker.
+
+### BibTeX
+```bibtex
+@InProceedings{Dinh_2025_CVPR,
+    author    = {Dinh, Nam Anh and Lang, Itai and Kim, Hyunwoo and Stein, Oded and Hanocka, Rana},
+    title     = {Geometry in Style: 3D Stylization via Surface Normal Deformation},
+    booktitle = {Proceedings of the Computer Vision and Pattern Recognition Conference (CVPR)},
+    month     = {June},
+    year      = {2025},
+    pages     = {28456-28467}
+}
+```
