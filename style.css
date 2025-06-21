@@ -128,6 +128,12 @@ h2 {
       justify-content: center;
     }
 
+    >.venue:hover {
+      background-color: var(--accentbg);
+      box-shadow: var(--shadowlight), var(--dropshadow);
+      transform: var(--buttontransform);
+    }
+
     >a {
       transition: background-color 0.1s;
       text-decoration: none;
