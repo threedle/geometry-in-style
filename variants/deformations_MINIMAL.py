@@ -7,22 +7,49 @@ in other projects)
 basic usage:
 >>> (verts1, faces1) = mesh1
     (verts2, faces2) = mesh2
-    # etc. These _lists store their quantity for all meshes in a batch;
-    # they should have the same length (== num of meshes in the batch).
-    # The per-mesh arrays don't have to have the same element count as that of all other
-    meshes (i.e. this is for heterogenous batching)
+
+    # supports heterogeneous batching. for example, operating on a batch of two
+    # meshes (mesh1, mesh2) not necessarily of the same vertex and face counts
+    # etc. These _lists variables store their quantity for a whole batch; these
+    # lists should have the same length (== num of meshes in the batch).
+    # (this is like pytorch3d's convention for heterogeneous batches)
+
+    (verts1, faces1) = mesh1
+    (verts2, faces2) = mesh2
     verts_list = [verts1, verts2]
     faces_list = [faces1, faces2]
+
+    # prepare the solver
     solvers = SparseLaplaciansSolvers.from_meshes(
-        verts_list, faces_list,
-        compute_poisson_rhs_lefts=False, compute_igl_arap_rhs_lefts=None
+    verts_list, faces_list,
+    pin_first_vertex=True,
+    compute_poisson_rhs_lefts=False,
+    compute_igl_arap_rhs_lefts=None,
     )
+
+    # find per-vertex matrices with local step
+    procrustes_precompute = ProcrustesPrecompute.from_meshes(
+        local_step_procrustes_lambda=lamb,
+        arap_energy_type="spokes_and_rims_mine",
+        laplacians_solvers=solvers,
+        verts_list=verts_list,
+        faces_list=faces_list
+    )
+    per_vertex_3x3matrices_packed = calc_rot_matrices_with_procrustes(
+        procrustes_precompute,
+        torch.cat(verts_list),
+        torch.cat(target_normals_list)
+    )
+    # (assuming target_normals_list is a list of tensors each (n_verts, 3), each tensor is the target per-vertex normals of a single mesh in the batch)
+
+    per_vertex_3x3matrices_list = torch.split(per_vertex_3x3matrices_packed, [len(v) for v in verts_list])
+
+    # solve for deformations given per-vertex 3x3 matrices
     deformed_verts_list = calc_ARAP_global_solve(
         verts_list, faces_list, solvers, per_vertex_3x3matrices_list,
         arap_energy_type="spokes_and_rims_mine",
-        postprocess=True
+        postprocess="recenter_only"
     )
-
 if you ever need to extract minibatches out of verts_list, faces_list, etc, and solve a
 deformation on them, make sure to also get the corresponding solvers with
 `solvers[batch_item_indices]` which returns another SparseLaplaciansSolvers object
