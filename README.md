@@ -133,6 +133,7 @@ python thlog.py replay psrec-deform-csdv3-example-cuteanimalthemedchair.npz
 python apply_saved_deform_qty_npz.py example-run/nrmls-expected-cuteanimalthemedchair.npz
 ```
 - You can also add `--cpu true` to run on a local, CPU-only machine; you can add `--lamb x` to set a different lambda hyperparameter (deformation strength) with which to apply this saved deformation (higher is stronger.) The saved lambda used during optimization is 8.0; try setting it to 5 or 10.
+- Add `NO_POLYSCOPE=1` to the start of the command to run this on a headless system; you might also want to specify the argument `--save_fname YOUR_RESULT_FNAME.obj` to save the resulting mesh to a file.
 
 ### Misc repro notes
 - We use pytorch3d's cotangent laplacian function which happens to use `cot a + cot b` weights rather than `0.5 * (cot a + cotb)` like libigl's `cotmatrix` function. This had no effect on our implementation of the ARAP global solve right-hand-side since the same weights are in the matrix and the right-hand-side construction, but when using the prefactored IGL `arap_rhs` right-hand-side constructor, a `2 *` correction is needed on the resulting `rhs` assuming no rescaling back to the source shape's bounding box diagonal extent.

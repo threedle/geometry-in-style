@@ -12,7 +12,7 @@ from thronf import Thronfig, InvalidConfigError
 import deformations_dARAP
 
 thlog = Thlogger(LOG_INFO, VIZ_INFO, "apply_deform", imports=[deformations_dARAP.thlog])
-thlog.init_polyscope()
+thlog.init_polyscope(start_polyscope_recorder=True)
 
 
 @dataclass
