@@ -336,6 +336,9 @@ i.med-nbsp:before {
   content: " ";
 }
 
+pre {
+  overflow-x: scroll;
+}
 
 @media (min-width: 100px) {
   .intro {
