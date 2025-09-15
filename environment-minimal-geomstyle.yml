@@ -31,7 +31,7 @@ dependencies:
     - scipy>=1.10
     - numpy<2.0
     - matplotlib
-    - libigl
+    - libigl==2.5.1
     - https://github.com/NVlabs/nvdiffrast/archive/main.zip
 
     # these 4 are for NJF. I need cholespy for my own solver; latter 3 are NJF-only
