@@ -45,10 +45,12 @@
     "cams_and_lights": {
       "raster_res": 512,
       "dist_minmax": [2.5,3.0],
+      "//dist_minmax__for_humans_and_tallslender_shapes": [1.4, 2.6],
       "azim_minmax": [0.0,360.0],
       "elev_minmax": [0.0,60.0],
+      "//elev_minmax__for_humans_and_tallslender_shapes": [0.0, 30.0],
       "fov_minmax": [60.0, 60.0],
-      "//fov_minmax": [55.0, 80.0],
+      "//fov_minmax__alternate_for_lower_shear": [55.0, 80.0],
       "light_power": 5.0,
       "aug_loc": false,
       "aug_light": true,

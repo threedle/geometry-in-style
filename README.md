@@ -142,6 +142,7 @@ python apply_saved_deform_qty_npz.py example-run/nrmls-expected-cuteanimalthemed
   - To keep parity with the pytorch3d cot laplacian that we've been using, the `deformations_MINIMAL.py` file (with no pytorch3d dependencies, for ease of use in other projects) will compute the laplacian with `-2 * igl.cotmatrix(v,f)`. (The `-` is also because igl's cotmatrix follows the negative-definite convention, but we need the positive definite matrix for the solve.)
 
 - In the paper we use a fixed FOV of 60 degrees for all runs, but a FOV range of (55, 80) is also good and can lessen any "global shearing" effect of the deformation in some cases.
+- (Mentioned in the paper, but noted here for convenience) **Note that for human shapes** (and tall/slim shapes like candles), different view settings are preferred over the defaults: for human shapes, try `"elev_minmax": [0, 30]` and `"dist_minmax": [1.4, 2.6]`. These are mentioned in `confg_base.json` but commented out.
 
 ### Type stubs
 - In the `cholespy`, `pytorch3d`, `igl` folders are type stubs (`.pyi` files) containing type signatures for the functions from those libraries we use (for a better experience with static type checkers). Feel free to use them in your own projects involving these libraries if you use a static type checker.
